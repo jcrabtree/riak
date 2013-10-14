@@ -17,13 +17,36 @@
 +W w
 
 ## Increase number of concurrent ports/sockets
--env ERL_MAX_PORTS 4096
+-env ERL_MAX_PORTS 64000
 
 ## Tweak GC to run more often 
 -env ERL_FULLSWEEP_AFTER 0
 
 ## Set the location of crash dumps
 -env ERL_CRASH_DUMP {{crash_dump}}
+
+## Raise the ETS table limit
+-env ERL_MAX_ETS_TABLES 256000
+
+## Force the erlang VM to use SMP
+-smp enable
+
+## For nodes with many busy_dist_port events, Basho recommends
+## raising the sender-side network distribution buffer size.
+## 32MB may not be sufficient for some workloads and is a suggested
+## starting point.
+## The Erlang/OTP default is 1024 (1 megabyte).
+## See: http://www.erlang.org/doc/man/erl.html#%2bzdbbl
+##+zdbbl 32768
+
+## Raise the default erlang process limit 
++P 256000
+
+## Erlang VM scheduler tuning.
+## Prerequisite: a patched VM from Basho, or a VM compiled separately
+## with this patch applied:
+##     https://gist.github.com/evanmcc/a599f4c6374338ed672e
+##+sfwi 500
 
 ## Begin SSL distribution items, DO NOT DELETE OR EDIT THIS COMMENT
 
